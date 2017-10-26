@@ -4,6 +4,7 @@ const SYMBOL_O = 'o'
 class TicTacToe {
     constructor() {
         this.current = SYMBOL_X
+        this.winner = null
         this.field = [[null, null, null], [null, null, null], [null, null, null]]
         this.patterns = [
             [[1,1,1],[0,0,0],[0,0,0]], // horizontal
@@ -24,6 +25,8 @@ class TicTacToe {
     nextTurn(rowIndex, columnIndex) {
         if (this.field[rowIndex][columnIndex] === null) {
             this.field[rowIndex][columnIndex] = this.current
+
+            this.winner = this.isWinner(this.current) ? this.current : null            
             this.current = (this.current === SYMBOL_X) ? SYMBOL_O : SYMBOL_X
         }
     }
@@ -33,25 +36,22 @@ class TicTacToe {
     }
 
     getWinner() {   
-        if (this.isWinner(SYMBOL_X)) return SYMBOL_X
-        if (this.isWinner(SYMBOL_O)) return SYMBOL_O
-        return null
+        return this.winner
     }
 
     isWinner(symbol_) {
-        return this.patterns.some(pattern => {
+        return this.patterns.some((pattern) => {
             return pattern.every((row, rowIndex) => {
                 return row.every((item, colIndex) => {
-                    return ((item === 1 && this.field[rowIndex][colIndex] === symbol_)
-                            || (item === 0))
+                    return ((item === 1 && this.field[rowIndex][colIndex] === symbol_) || (item === 0))
                 })
             })
         })
     }
 
     noMoreTurns() {
-        return this.field.every(row => {
-            return row.every(item => {
+        return this.field.every((row) => {
+            return row.every((item) => {
                 return (item === SYMBOL_X || item === SYMBOL_O) ? true : false                
             })
         })
